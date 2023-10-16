@@ -38,7 +38,7 @@ public class ApartmentManager {
         scndCenterApart.setFloorNumber(1);
         scndCenterApart.setFloorCount(5);
         // Расчет стоимости квартиры в центре с учетом этажа и этажности
-        System.out.println("Стоимость квартиры в центре с учетом этажа и этажности дома: " + thrdCenterApart.CountCenterApartmentCost(CenterApartCost));
+        System.out.println("Стоимость квартиры в центре с учетом этажа и этажности дома: " + thrdCenterApart.CountApartmentCost(CenterApartCost));
         // Создание объекта квартиры в пригороде с указанным расстоянием от центра
         VillageApartment frstVillageApart = new VillageApartment(15);
         // Создание объекта квартиры в пригороде с параметрами по умолчанию
@@ -48,6 +48,6 @@ public class ApartmentManager {
         // Установка расстояния от центра для квартиры в пригороде
         scndVillageApart.setR(20);
         // Расчет стоимости квартиры в пригороде с учетом расстояния от центра
-        System.out.println("Стоимость квартиры в пригороде с учетом расстояния от центра: " + thrdVillageApart.CountVillageApartmentCost(VillageApartCost));
+        System.out.println("Стоимость квартиры в пригороде с учетом расстояния от центра: " + thrdVillageApart.CountApartmentCost(VillageApartCost));
     }
 }

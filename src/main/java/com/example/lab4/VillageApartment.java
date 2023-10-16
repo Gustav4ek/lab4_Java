@@ -53,7 +53,7 @@ public class VillageApartment extends Apartment{
      * @param apsCost Стоимость квартиры до применения надбавок.
      * @return Общая стоимость квартиры в пригороде.
      */
-    public double CountVillageApartmentCost(double apsCost) {
+    public double CountApartmentCost(double apsCost) {
         double cost = apsCost;
         if (r<10) {
             cost +=cost/100*5;

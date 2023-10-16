@@ -79,7 +79,7 @@ public class ApartmentCenter extends Apartment {
      * @param apsCost Стоимость квартиры до применения надбавок.
      * @return Общая стоимость квартиры в центре.
      */
-    public double CountCenterApartmentCost(double apsCost) {
+    public double CountApartmentCost(double apsCost) {
         double cost = apsCost;
         cost += cost / 100 * 5;
         if (this.FloorNumber == 1 || this.FloorNumber == this.FloorCount || this.FloorNumber == this.FloorCount - 1) {

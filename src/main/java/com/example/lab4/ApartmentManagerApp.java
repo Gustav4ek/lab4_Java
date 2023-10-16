@@ -1,71 +1,160 @@
 package com.example.lab4;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * Главный класс приложения для управления квартирами с графическим интерфейсом JavaFX.
+ * Главный класс приложения управления квартирами.
  */
 public class ApartmentManagerApp extends Application {
+    private Button cityButton;
+    private Button suburbButton;
+    private TextField streetField;
+    private TextField costPerSquareMeterField;
+    private TextField areaField;
+    private TextField distanceToCenterField;
+    private TextField floorCountField;
+    private TextField floorNumberField;
+    private Label resultLabel;
+
     /**
-     * Точка входа в приложение. Запускает графический интерфейс.
+     * Точка входа в приложение.
      *
-     * @param args Аргументы командной строки (не используются).
+     * @param args Параметры командной строки.
      */
     public static void main(String[] args) {
         launch(args);
     }
-    /**
-     * Метод, который будет вызван при запуске приложения. Инициализирует основные элементы интерфейса.
-     *
-     * @param primaryStage Основная сцена приложения.
-     */
+
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Управление квартирами");
+        primaryStage.setTitle("Apartment Manager");
 
-        // Создаем главное меню
+        // Создание меню
         MenuBar menuBar = new MenuBar();
-        Menu aboutMenu = new Menu("О программе");
-        MenuItem aboutAuthorItem = new MenuItem("Об авторе");
-        aboutAuthorItem.setOnAction(e -> showAboutAuthorDialog());
+        Menu authorMenu = new Menu("Об авторе");
+        MenuItem authorItem = new MenuItem("Автор: Ярослав Будюхин");
+        authorMenu.getItems().add(authorItem);
+
+        Menu fileMenu = new Menu("Файл");
         MenuItem exitItem = new MenuItem("Выход");
-        exitItem.setOnAction(e -> primaryStage.close());
-        aboutMenu.getItems().addAll(aboutAuthorItem, exitItem);
-        menuBar.getMenus().add(aboutMenu);
+        exitItem.setOnAction(e -> System.exit(0));
+        fileMenu.getItems().add(exitItem);
 
-        // Создаем основной контент
-        VBox mainLayout = new VBox();
-        mainLayout.getChildren().addAll(menuBar, new ApartmentManagerPane());
+        menuBar.getMenus().addAll(authorMenu, fileMenu);
 
-        Scene scene = new Scene(mainLayout, 600, 400);
+        VBox root = new VBox(10);
+        root.setPadding(new Insets(10));
+        root.getChildren().add(menuBar);
+
+        cityButton = new Button("Квартира в центре");
+        suburbButton = new Button("Квартира в пригороде");
+
+        cityButton.setOnAction(e -> showCityFields());
+        suburbButton.setOnAction(e -> showSuburbFields());
+
+        root.getChildren().addAll(cityButton, suburbButton);
+
+        Scene scene = new Scene(root, 1000, 500);
+
         primaryStage.setScene(scene);
-
         primaryStage.show();
     }
     /**
-     * Отображает диалоговое окно с информацией об авторе приложения.
+     * Метод для отображения полей ввода при выборе квартиры в центре.
      */
-    private void showAboutAuthorDialog() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Об авторе");
-        alert.setHeaderText(null);
-        alert.setContentText("Автор: Ярослав Будюхин\nДата: " + getCurrentDate());
-        alert.showAndWait();
+    private void showCityFields() {
+        cityButton.setVisible(false);
+        suburbButton.setVisible(false);
+
+        streetField = new TextField();
+        streetField.setPromptText("Название улицы");
+
+        costPerSquareMeterField = new TextField();
+        costPerSquareMeterField.setPromptText("Стоимость 1 кв м");
+
+        areaField = new TextField();
+        areaField.setPromptText("Площадь");
+
+        floorCountField = new TextField();
+        floorCountField.setPromptText("Этажность дома");
+
+        floorNumberField = new TextField();
+        floorNumberField.setPromptText("Этаж");
+
+        Button calculateButton = new Button("Рассчитать");
+        calculateButton.setOnAction(e -> calculateCityApartmentCost());
+
+        resultLabel = new Label("");
+
+        VBox root = (VBox) cityButton.getParent();
+        root.getChildren().addAll(streetField, costPerSquareMeterField, areaField, floorCountField, floorNumberField, calculateButton, resultLabel);
     }
+
     /**
-     * Получает текущую дату и возвращает ее в виде строки.
-     *
-     * @return Строка с текущей датой.
+     * Метод для отображения полей ввода при выборе квартиры в пригороде.
      */
-    private String getCurrentDate() {
-        // Здесь можно использовать классы для работы с датой и временем
-        return "09.10.2023";
+    private void showSuburbFields() {
+        cityButton.setVisible(false);
+        suburbButton.setVisible(false);
+
+        streetField = new TextField();
+        streetField.setPromptText("Название улицы");
+
+        costPerSquareMeterField = new TextField();
+        costPerSquareMeterField.setPromptText("Стоимость 1 кв м");
+
+        areaField = new TextField();
+        areaField.setPromptText("Площадь");
+
+        distanceToCenterField = new TextField();
+        distanceToCenterField.setPromptText("Расстояние до центра");
+
+        Button calculateButton = new Button("Рассчитать");
+        calculateButton.setOnAction(e -> calculateSuburbApartmentCost());
+
+        resultLabel = new Label("");
+
+        VBox root = (VBox) suburbButton.getParent();
+        root.getChildren().addAll(streetField, costPerSquareMeterField, areaField, distanceToCenterField, calculateButton, resultLabel);
+    }
+
+    private void calculateCityApartmentCost() {
+        String street = streetField.getText();
+        double costPerSquareMeter = Double.parseDouble(costPerSquareMeterField.getText());
+        double area = Double.parseDouble(areaField.getText());
+        int floorCount = Integer.parseInt(floorCountField.getText());
+        int floorNumber = Integer.parseInt(floorNumberField.getText());
+
+        Apartment DefaultApartment = new Apartment();
+        ApartmentCenter cityProperty = new ApartmentCenter(floorNumber, floorCount);
+        DefaultApartment.setAddress(street);
+        DefaultApartment.setCost(costPerSquareMeter);
+        DefaultApartment.setSize(area);
+
+        double CostApartment = DefaultApartment.CountApartmentCost();
+        double totalCost = cityProperty.CountApartmentCost(CostApartment);
+        resultLabel.setText("Общая стоимость квартиры в центре: " + totalCost);
+    }
+
+    private void calculateSuburbApartmentCost() {
+        String street = streetField.getText();
+        double costPerSquareMeter = Double.parseDouble(costPerSquareMeterField.getText());
+        double area = Double.parseDouble(areaField.getText());
+        int distanceToCenter = Integer.parseInt(distanceToCenterField.getText());
+
+        Apartment DefaultApartment = new Apartment();
+        VillageApartment suburbProperty = new VillageApartment(distanceToCenter);
+        DefaultApartment.setAddress(street);
+        DefaultApartment.setCost(costPerSquareMeter);
+        DefaultApartment.setSize(area);
+
+        double CostApartment = DefaultApartment.CountApartmentCost();
+        double totalCost = suburbProperty.CountApartmentCost(CostApartment);
+        resultLabel.setText("Общая стоимость квартиры в пригороде: " + totalCost);
     }
 }

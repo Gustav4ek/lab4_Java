@@ -8,7 +8,7 @@ package com.example.lab4;
         private String address;
         private int number;
         private double cost;
-        private int size;
+        private double size;
         /**
          * Конструктор для создания объекта Apartment с указанными параметрами.
          *
@@ -70,7 +70,7 @@ package com.example.lab4;
          *
          * @param cost Новая стоимость 1 м².
          */
-        public void setCost(int cost) {
+        public void setCost(double cost) {
             this.cost = cost;
         }
         /**
@@ -78,7 +78,7 @@ package com.example.lab4;
          *
          * @param size Новая площадь квартиры.
          */
-        public void setSize(int size) {
+        public void setSize(double size) {
             this.size = size;
         }
         /**
@@ -110,7 +110,7 @@ package com.example.lab4;
          *
          * @return Площадь квартиры.
          */
-        public int getSize() {
+        public double getSize() {
             return size;
         }
         /**
